@@ -22,7 +22,7 @@ systems and logging daemons settings and paths may differ.
 You can install *ain* as usual - by copy "ain" directory in your 
 `~/.node_libraries` or via *npm*
 
-    npm install ain
+    npm install ain2
 
 ## Usage
 
@@ -48,11 +48,12 @@ By default *ain* sets following destinations:
 * `TAG` - `__filename`
 * `Facility` - user (1)
 * `HOSTNAME` - localhost
+* `HOSTNAME` - 514
 
 You can change them by `set` function. `set` function is chainable.
 
     var logger = require('ain')
-            .set('node-test-app', 'daemon', 'devhost');
+            .set('node-test-app', 'daemon', 'devhost', 3000);
     logger.warn('some warning');
     
 ... and in `/var/log/daemon.log`:
