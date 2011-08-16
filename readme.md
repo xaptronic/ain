@@ -1,6 +1,5 @@
 # ain*
 
-*I do not support this more. If you need it, just fork it*
 
 Brain-free [syslog](http://en.wikipedia.org/wiki/Syslog)** logging for 
 [node.js](http://nodejs.org).
