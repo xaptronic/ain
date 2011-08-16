@@ -3,7 +3,7 @@
     "description" : "Syslog logging for node.js. Continuation of ain",
     "version" : "0.0.2",
     "main" : "./index",
-    "author" : "Alexander Dorofeev <aka.spin@gmail.com>\nPatrick Huesler <patrick.huesler@googlemail.com",
+    "author" : "Alexander Dorofeev <aka.spin@gmail.com>",
     "contributors" : [
         {
             "name" : "Alexander Dorofeev",
