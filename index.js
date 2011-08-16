@@ -154,10 +154,17 @@ SysLogger.prototype._send = function(message, severity) {
     var message = new Buffer('<' + (this.facility * 8 + severity) + '>' +
         getDate() + ' ' + this.hostname + ' ' + 
         this.tag + '[' + process.pid + ']:' + message);
-    client.send(message, 0, message.length, 514, '127.0.0.1', 
-        function(err) {
-            if (err) console.error('Can\'t connect to localhost:514');
-    });
+    client.send(message,
+                0,
+                message.length,
+                this.port,
+                this.hostname,
+                function(err) {
+                  if(err){
+                    console.error('Cannot connect to %s:%d', this.hostname, this.port);
+                  }
+                }
+    );
     client.close();
 };
 
