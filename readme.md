@@ -29,7 +29,7 @@ You can install *ain* as usual - by copy "ain" directory in your
 Usage of *ain* is very similar to *node.js* console. Following example 
 demonstrates the replacement of the console:
 
-    var console = require('ain');
+    var console = require('ain2');
     
     console.log('notice: %d', Date.now());
     console.info('info');
@@ -52,7 +52,7 @@ By default *ain* sets following destinations:
 
 You can change them by `set` function. `set` function is chainable.
 
-    var logger = require('ain')
+    var logger = require('ain2')
             .set('node-test-app', 'daemon', 'devhost', 3000);
     logger.warn('some warning');
     
