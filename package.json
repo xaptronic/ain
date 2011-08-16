@@ -1,6 +1,6 @@
 {
     "name" : "ain2",
-    "description" : "Syslog logging for node.js",
+    "description" : "Syslog logging for node.js. Continuation of ain",
     "version" : "0.0.2",
     "main" : "./index",
     "author" : "Alexander Dorofeev",
