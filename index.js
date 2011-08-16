@@ -106,10 +106,11 @@ function SysLogger() {
  * @param {Facility|Number|String} By default is "user"
  * @param {String} hostname By default is "localhost"
  */
-SysLogger.prototype.set = function(tag, facility, hostname) {
+SysLogger.prototype.set = function(tag, facility, hostname, port) {
     this.setTag(tag);
     this.setFacility(facility);
     this.setHostname(hostname);
+    this.setPort(port);
     
     return this;
 };
@@ -126,6 +127,11 @@ SysLogger.prototype.setFacility = function(facility) {
 };
 SysLogger.prototype.setHostname = function(hostname) {
     this.hostname = hostname || 'localhost';
+    return this;
+};
+
+SysLogger.prototype.setPort = function(port) {
+    this.port = port || 514;
     return this;
 };
 
