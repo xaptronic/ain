@@ -51,7 +51,7 @@ function format(f) {
     return objects.join(' ');
   }
   
-  var i = 1;
+  i = 1;
   var args = arguments;
   var str = String(f).replace(formatRegExp, function(x) {
     switch (x) {
@@ -154,7 +154,7 @@ SysLogger.prototype.get = function() {
  */
 SysLogger.prototype._send = function(message, severity) {
     var client = dgram.createSocket('udp4');
-    var message = new Buffer('<' + (this.facility * 8 + severity) + '>' +
+    message = new Buffer('<' + (this.facility * 8 + severity) + '>' +
         getDate() + ' ' + this.hostname + ' ' + 
         this.tag + '[' + process.pid + ']:' + message);
     client.send(message,
