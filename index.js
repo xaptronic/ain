@@ -2,7 +2,8 @@ var dgram = require('dgram');
 var Buffer = require('buffer').Buffer;
 var nodeConsole = console;
 
-var OsHostname = require("os").hostname();
+var DefaultHostname = require("os").hostname();
+var DefaultAddress = "127.0.0.1";
 
 var Facility = {
     kern:   0,
@@ -134,7 +135,12 @@ SysLogger.prototype.setFacility = function(facility) {
     return this;
 };
 SysLogger.prototype.setHostname = function(hostname) {
-    this.hostname = hostname || OsHostname;
+    if (hostname) {
+      this.hostname = this.address = hostname;
+    } else {
+      this.hostname = DefaultHostname;
+      this.address = DefaultAddress;
+    }
     return this;
 };
 
@@ -166,7 +172,7 @@ SysLogger.prototype._send = function(message, severity) {
                 0,
                 message.length,
                 this.port,
-                this.hostname,
+                this.address,
                 this._logError
     );
     client.close();
