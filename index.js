@@ -1,5 +1,6 @@
 var dgram = require('dgram');
 var Buffer = require('buffer').Buffer;
+var nodeConsole = console;
 
 var Facility = {
     kern:   0,
@@ -161,7 +162,7 @@ SysLogger.prototype._send = function(message, severity) {
                 this.hostname,
                 function(err) {
                   if(err){
-                    console.error('Cannot connect to %s:%d', this.hostname, this.port);
+                    nodeConsole.error('Cannot connect to %s:%d', this.hostname, this.port);
                   }
                 }
     );
