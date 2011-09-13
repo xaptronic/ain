@@ -2,6 +2,8 @@ var dgram = require('dgram');
 var Buffer = require('buffer').Buffer;
 var nodeConsole = console;
 
+var OsHostname = require("os").hostname();
+
 var Facility = {
     kern:   0,
     user:   1,
@@ -105,7 +107,7 @@ function SysLogger() {
  * Init function. All arguments is optional
  * @param {String} tag By default is __filename
  * @param {Facility|Number|String} By default is "user"
- * @param {String} hostname By default is "localhost"
+ * @param {String} hostname By default is require("os").hostname()
  */
 SysLogger.prototype.set = function(tag, facility, hostname, port) {
     this.setTag(tag);
@@ -127,7 +129,7 @@ SysLogger.prototype.setFacility = function(facility) {
     return this;
 };
 SysLogger.prototype.setHostname = function(hostname) {
-    this.hostname = hostname || 'localhost';
+    this.hostname = hostname || OsHostname;
     return this;
 };
 
