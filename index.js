@@ -101,6 +101,11 @@ function getDate() {
  */
 function SysLogger() {
     this._times = {};
+    this._logError = function(err, other) {
+      if(err){
+        nodeConsole.error('Cannot connect to %s:%d', this.hostname, this.port);
+      }
+    }.bind(this);
 }
 
 /**
@@ -162,11 +167,7 @@ SysLogger.prototype._send = function(message, severity) {
                 message.length,
                 this.port,
                 this.hostname,
-                function(err) {
-                  if(err){
-                    nodeConsole.error('Cannot connect to %s:%d', this.hostname, this.port);
-                  }
-                }
+                this._logError
     );
     client.close();
 };
