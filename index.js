@@ -52,19 +52,19 @@ function format(f) {
     return objects.join(' ');
   }
   
-  i = 1;
+  var index = 1;
   var args = arguments;
   var str = String(f).replace(formatRegExp, function(x) {
     switch (x) {
-      case '%s': return args[i++];
-      case '%d': return +args[i++];
-      case '%j': return JSON.stringify(args[i++]);
+      case '%s': return args[index++];
+      case '%d': return +args[index++];
+      case '%j': return JSON.stringify(args[index++]);
       default:
         return x;
     }
   });
-  for (var len = args.length; i < len; ++i) {
-    str += ' ' + args[i];
+  for (var len = args.length; index < len; ++index) {
+    str += ' ' + args[index];
   }
   return str;
 }
@@ -88,11 +88,12 @@ function getDate() {
     var seconds = leadZero(dt.getSeconds());
     var month = dt.getMonth();
     var day = dt.getDate();
-    (day < 10) && (day = ' ' + day);
+    if(day < 10){
+      day = ' ' + day;
+    }
     var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
             'Sep', 'Oct', 'Nov', 'Dec' ];
-    return months[month] + " " + day + " " + hours + ":" + minutes
-            + ":" + seconds;
+    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
 }
 
 /**
@@ -130,8 +131,9 @@ SysLogger.prototype.setTag = function(tag) {
 };
 SysLogger.prototype.setFacility = function(facility) {
     this.facility = facility || Facility.user;
-    if (typeof this.facility == 'string') 
+    if (typeof this.facility == 'string'){ 
         this.facility = Facility[this.facility];
+    }
     return this;
 };
 SysLogger.prototype.setHostname = function(hostname) {
@@ -185,7 +187,9 @@ SysLogger.prototype._send = function(message, severity) {
  */
 SysLogger.prototype.send = function(message, severity) {
     severity = severity || Severity.notice;
-    if (typeof severity == 'string') severity = Severity[severity];
+    if (typeof severity == 'string'){
+      severity = Severity[severity];
+    }
     this._send(message, severity);
 };
 
@@ -237,7 +241,7 @@ SysLogger.prototype.timeEnd = function(label) {
 };
 
 SysLogger.prototype.trace = function(label) {
-    var err = new Error;
+    var err = new Error();
     err.name = 'Trace';
     err.message = label || '';
     Error.captureStackTrace(err, arguments.callee);
