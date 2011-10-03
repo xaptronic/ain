@@ -175,11 +175,11 @@ function SysLogger() {
  * Init function, takes a configuration object. If a hostname is provided the transport is assumed
  * to be Transport.UDP
  * @param {Object} configuration object with the following keys:
- *          - {String} tag By default is __filename
- *          - {Facility|Number|String} By default is "user"
- *          - {String} hostname By default is require("os").hostname()
- *          - {Number} port, defaults to 514
- *          - {Transport|String} transport to use, defaults to Transport.UDP
+ *          - tag       - {String}                  By default is __filename
+ *          - facility  - {Facility|Number|String}  By default is "user"
+ *          - hostname  - {String}                  By default is require("os").hostname()
+ *          - port      - {Number}                  Defaults to 514
+ *          - transport - {Transport|String}        Defaults to Transport.UDP
  */
 SysLogger.prototype.set = function(config) {
     config = config || {} ;
