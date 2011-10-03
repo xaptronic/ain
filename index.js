@@ -166,7 +166,7 @@ function SysLogger() {
     this._times = {};
     this._logError = function(err, other) {
       if(err){
-        nodeConsole.error('Cannot log message via %s:%s:%d', this.transport, this.hostname, this.port);
+        nodeConsole.error('Cannot log message via %s:%d', this.hostname, this.port);
       }
     }.bind(this);
 }
