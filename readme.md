@@ -9,7 +9,9 @@ implements all `console` functions and formatting. Also *ain* supports UTF-8
 (tested on Debian Testing/Sid).
 
 *Ain* can send messages by UDP to `127.0.0.1:514` or to the a unix socket; 
-/dev/log on Linux and /var/run/syslog on Mac OS X
+/dev/log on Linux and /var/run/syslog on Mac OS X. The unix sockets only
+work for the 0.4.x versions of node.js, unix_dgram sockets support has
+been [removed](http://groups.google.com/group/nodejs/browse_thread/thread/882ce172ec463f52/62e392bb0f32a7cb) from > 0.5.x.
 
 *In the Phoenician alphabet letter "ain" indicates eye.
 
