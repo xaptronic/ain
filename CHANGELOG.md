@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.1.0
+
+* Support for unix sockets, for the 0.4.x branch of node (Parham Michael
+  Ossareh/ossareh)
+
 ## v0.0.3
 
 * Explicitly fall back to original `console` object to log send failures (Mark Wubben/novemberborn)
