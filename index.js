@@ -5,6 +5,34 @@ var nodeConsole = console;
 var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
 
+
+function leadZero(n) {
+    if (n < 10) {
+        return '0' + n;
+    } else {
+        return n;
+    }
+}
+
+/**
+ * Get current date in syslog format. Thanks https://github.com/kordless/lodge
+ * @returns {String}
+ */
+function getDate() {
+    var dt = new Date();
+    var hours = leadZero(dt.getHours());
+    var minutes = leadZero(dt.getMinutes());
+    var seconds = leadZero(dt.getSeconds());
+    var month = dt.getMonth();
+    var day = dt.getDate();
+    if(day < 10){
+      day = ' ' + day;
+    }
+    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+            'Sep', 'Oct', 'Nov', 'Dec' ];
+    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
+}
+
 var Transport = {
     UDP: function(message, severity) {
         var client = dgram.createSocket('udp4');
@@ -54,7 +82,7 @@ var Transport = {
             );
             client.close() ;
 
-        }
+        };
     })()
 };
 
@@ -98,18 +126,19 @@ var formatRegExp = /%[sdj]/g;
  * @returns
  */
 function format(f) {
-  var util = require('util');
+  var   util = require('util'),
+        i    = 0;
 
   if (typeof f !== 'string') {
     var objects = [];
-    for (var i = 0; i < arguments.length; i++) {
+    for (i = 0; i < arguments.length; i++) {
       objects.push(util.inspect(arguments[i]));
     }
     return objects.join(' ');
   }
 
 
-  var i = 1;
+  i = 1;
   var args = arguments;
   var str = String(f).replace(formatRegExp, function(x) {
     switch (x) {
@@ -128,33 +157,6 @@ function format(f) {
     }
   }
   return str;
-}
-
-function leadZero(n) {
-    if (n < 10) {
-        return '0' + n;
-    } else {
-        return n;
-    }
-}
-
-/**
- * Get current date in syslog format. Thanks https://github.com/kordless/lodge
- * @returns {String}
- */
-function getDate() {
-    var dt = new Date();
-    var hours = leadZero(dt.getHours());
-    var minutes = leadZero(dt.getMinutes());
-    var seconds = leadZero(dt.getSeconds());
-    var month = dt.getMonth();
-    var day = dt.getDate();
-    if(day < 10){
-      day = ' ' + day;
-    }
-    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
-            'Sep', 'Oct', 'Nov', 'Dec' ];
-    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
 }
 
 /**
