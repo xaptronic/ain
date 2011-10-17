@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.1.0
+## v0.2.0
 
 * Support for unix sockets, for the 0.4.x branch of node (Parham Michael
   Ossareh/ossareh)
