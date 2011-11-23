@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.2.1
+
+* Support for node v0.6.0 (Yoji Shidara/darashi)
+
 ## v0.2.0
 
 * Support for unix sockets, for the 0.4.x branch of node (Parham Michael
