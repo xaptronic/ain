@@ -15,13 +15,13 @@ been [removed](http://groups.google.com/group/nodejs/browse_thread/thread/882ce1
 
 *In the Phoenician alphabet letter "ain" indicates eye.
 
-**All examples tested under Debian Squeeze `rsyslog`. On other operating 
+**All examples tested under Ubuntu `rsyslog`. On other operating 
 systems and logging daemons settings and paths may differ.
 
 ## Installation
 
 You can install *ain* as usual - by copy "ain" directory in your 
-`~/.node_libraries` or via *npm*
+`~/.node_modules` or via *npm*
 
     npm install ain2
 
