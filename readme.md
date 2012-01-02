@@ -42,6 +42,23 @@ After launch in `/var/log/user` you can see the following:
     Dec  5 06:45:26 localhost ex.js[6041]: notice: 1291513526013
     Dec  5 06:45:26 localhost ex.js[6041]: info
     Dec  5 06:45:26 localhost ex.js[6041]: error
+
+## Singleton logger
+
+If you want to have a singleton that points to the same object whenever you do a require, use the following:
+
+	require('ain2').getInstance();
+	
+If you use this, please be beware of this:
+
+	require('ain2').getInstance() ===  require('ain2').getInstance();
+	=> true
+	
+As opposed to:
+
+	var SysLogger = require('ain2');
+	new SysLogger() === new SysLogger();
+	=> false
     
 ## Changing destinations
 

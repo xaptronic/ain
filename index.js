@@ -4,7 +4,7 @@ var nodeConsole = console;
 
 var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
-
+var SingletonInstance = null;
 
 function leadZero(n) {
     if (n < 10) {
@@ -177,6 +177,17 @@ function SysLogger(config) {
     this.set(config);
     return this;
 }
+
+/**
+* Get singleton instance of SysLogger.
+* @returns {SysLogger}
+*/
+SysLogger.getInstance = function() {
+    if(!SingletonInstance){
+        SingletonInstance = new SysLogger();
+    }
+    return SingletonInstance;
+};
 
 /**
  * Init function, takes a configuration object. If a hostname is provided the transport is assumed

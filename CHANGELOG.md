@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v1.0.0
+
+WARNING: This upgrade is not API compatible to previous version.
+
+* Change the API to actually use JavaScript's new operator to create loggers
+
+		var SysLogger = require('ain2');
+		var logger = new SysLogger({ port : 514, tag : 'myTag' });
+
+* If you want to have singleton logger, use 
+    
+		var logger = require('ain2').getInstance();
+
 ## v0.2.1
 
 * Support for node v0.6.0 (Yoji Shidara/darashi)
