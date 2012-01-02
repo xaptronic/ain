@@ -167,13 +167,15 @@ function format(f) {
  * @constructor
  * @returns {SysLogger}
  */
-function SysLogger() {
+function SysLogger(config) {
     this._times = {};
     this._logError = function(err, other) {
       if(err){
         nodeConsole.error('Cannot log message via %s:%d', this.hostname, this.port);
       }
     }.bind(this);
+    this.set(config);
+    return this;
 }
 
 /**
@@ -330,6 +332,4 @@ SysLogger.prototype.assert = function(expression) {
     }
 };
 
-var logger = new SysLogger();
-logger.set();
-module.exports = logger;
+module.exports = SysLogger;
