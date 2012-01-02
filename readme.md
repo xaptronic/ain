@@ -4,7 +4,7 @@
 Brain-free [syslog](http://en.wikipedia.org/wiki/Syslog)** logging for 
 [node.js](http://nodejs.org).
 
-*Ain* written with full compatibility with *node.js* `console` module. It 
+*Ain* is written with full compatibility with *node.js* `console` module. It 
 implements all `console` functions and formatting. Also *ain* supports UTF-8 
 (tested on Debian Testing/Sid).
 
@@ -20,17 +20,18 @@ systems and logging daemons settings and paths may differ.
 
 ## Installation
 
-You can install *ain* as usual - by copy "ain" directory in your 
+You can install *ain* as usual - by copy the "ain" directory in your 
 `~/.node_modules` or via *npm*
 
     npm install ain2
 
 ## Usage
 
-Usage of *ain* is very similar to *node.js* console. Following example 
+Usage of *ain* is very similar to the *node.js* console. The following example 
 demonstrates the replacement of the console:
 
-    var console = require('ain2');
+    var SysLogger = require('ain2');
+    var console = new SysLogger();
     
     console.log('notice: %d', Date.now());
     console.info('info');
@@ -52,17 +53,19 @@ By default *ain* sets following destinations:
 * `PORT` - 514
 * `Transport` - UDP or Unix socket
 
-You can change them by `set` function. `set` function is chainable.
+You can change them by passing in the params to the constructor or by
+using the `set` function. The `set` function is chainable.
 
-    var logger = require('ain2')
-            .set({tag: 'node-test-app', facility: 'daemon', hostname: 'devhost', port: 3000});
+    var SysLogger = require('ain2');
+    var logger = new SysLogger({tag: 'node-test-app', facility: 'daemon', hostname: 'devhost', port: 3000});
+
     logger.warn('some warning');
     
 ... and in `/var/log/daemon.log`:
 
     Dec  5 07:08:58 devhost node-test-app[10045]: some warning
     
-`set` function takes one argument, a configuration object which can contain the following keys:
+The `set` function takes one argument, a configuration object which can contain the following keys:
  * tag - defaults to __filename
  * facility - defaults to user
  * hostname - defaults to require('os').hostname()
@@ -97,7 +100,7 @@ your messages.
     22  local6  local use 6
     23  local7  local use 7
 
-You can set `facility` by `String` or `Number`:
+You can set the `facility` by `String` or `Number`:
 
     logger.set({tag: 'node-test-app', facility: 3});
     logger.set({tag: 'node-test-app', facility: 'daemon'});
@@ -140,30 +143,9 @@ logs messages with different severity levels:
 * `trace` - err (3)
 * `assert` - err (3)
 
-To log message with desired severity level you can use `send` function:
+To log a message with the desired severity level you can use the `send` function:
 
     logger.send('message', 'alert');
     
-`send` function takes two arguments: message and optional severity level. By 
-default, severity level is *notice*.
-
-## Additional loggers
-
-After importing *ain* already has default logger. Everything that was 
-described above - just about it.
-
-If you need log message with different `TAG`, `facility` and `HOSTNAME` 
-without touching default logger, you can get independent instance of logger 
-by `get` function.
-
-    var logger = require('ain').set('node-test-app', 'daemon', 'devhost');
-    logger.warn('some warning');
-    
-    var anotherLogger = logger.get(logger.tag, 'local0', logger.hostname);
-    anotherLogger.log('another messgage'); 
-
-`get` function takes three arguments - as well as `set` function and return 
-new logger object. This object is just new instance of "logger" and has all 
-*ain* functions (including `get`). 
-
-
+The `send` function takes two arguments: message and optional severity level. By 
+default, the severity level is *notice*.

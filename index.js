@@ -239,16 +239,6 @@ SysLogger.prototype.setPort = function(port) {
 };
 
 /**
- * Get new instance of SysLogger. All arguments is similar as `set` 
- * @returns {SysLogger}
- */
-SysLogger.prototype.get = function() {
-    var newLogger = new SysLogger();
-    newLogger.set.apply(newLogger, arguments);
-    return newLogger;
-};
-
-/**
  * Send message
  * @param {String} message
  * @param {Severity} severity
