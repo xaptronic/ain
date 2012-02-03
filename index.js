@@ -11,7 +11,7 @@ var Transport = {
     UDP: function(message, severity) {
         var client = dgram.createSocket('udp4');
         var self = this;
-        var syslogMessage = this.composeSyslogMessage(message, severity);
+        var syslogMessage = this.composerFunction(message, severity);
         client.send(syslogMessage,
                     0,
                     syslogMessage.length,
@@ -43,7 +43,7 @@ var Transport = {
 
         return function(message, severity) {
             var client = dgram.createSocket('unix_dgram') ;
-            var syslogMessage = this.composeSyslogMessage(message, severity);
+            var syslogMessage = this.composerFunction(message, severity);
             client.send(syslogMessage,
                         0,
                         syslogMessage.length,
@@ -173,6 +173,7 @@ SysLogger.prototype.set = function(config) {
     this.setFacility(config.facility);
     this.setHostname(config.hostname);
     this.setPort(config.port);
+    this.setMessageComposer(config.messageComposer);
     if (config.hostname) {
         this.setTransport(Transport.UDP) ;
     } else {
@@ -213,6 +214,11 @@ SysLogger.prototype.setHostname = function(hostname) {
 
 SysLogger.prototype.setPort = function(port) {
     this.port = port || 514;
+    return this;
+};
+
+SysLogger.prototype.setMessageComposer = function(composerFunction){
+    this.composerFunction = composerFunction || this.composeSyslogMessage;
     return this;
 };
 

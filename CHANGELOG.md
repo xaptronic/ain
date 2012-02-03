@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.0
+
+* Custom message composer
+
 ## v1.0.0
 
 WARNING: This upgrade is not API compatible to previous version.

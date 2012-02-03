@@ -88,6 +88,7 @@ The `set` function takes one argument, a configuration object which can contain 
  * hostname - defaults to require('os').hostname()
  * port - defaults to 514
  * transport - defaults to 'UDP', can also be 'file'
+ * messageComposer - a custom function to compose syslog messages
 
 All of these are optional. If you provide a `hostname` transport is automatically set to UDP
 
@@ -123,7 +124,7 @@ You can set the `facility` by `String` or `Number`:
     logger.set({tag: 'node-test-app', facility: 'daemon'});
     
 Also you can set `TAG`, `Facility`, `HOSTNAME`, `PORT`, and `transport` separately by `setTag`, 
-`setFacility`, `setHostname`, `setPort` and `setTransport` functions. All of them are chainable too.
+`setFacility`, `setHostname`, `setPort`, `setTransport` and `setMessageComposer` functions. All of them are chainable too.
 
 You can get all destinations by these properties:
 
@@ -131,6 +132,26 @@ You can get all destinations by these properties:
 * `facility` Numerical representation of RFC 3164 facility
 * `hostname` HOSTNAME
 * `port` PORT
+
+## Custom message composer
+
+    var SysLogger = require('ain2');
+    var console = new SysLogger();
+
+    console.setMessageComposer(function(message, severity){
+        return new Buffer('<' + (this.facility * 8 + severity) + '>' +
+                this.getDate() + ' ' + '[' + process.pid + ']:' + message);
+    });
+
+    
+    //The default implementation looks this:
+
+
+    SysLogger.prototype.composeSyslogMessage = function(message, severity) {
+        return new Buffer('<' + (this.facility * 8 + severity) + '>' +
+                this.getDate() + ' ' + this.hostname + ' ' + 
+                this.tag + '[' + process.pid + ']:' + message);
+    }
 
 ## Logging
 

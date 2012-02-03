@@ -12,11 +12,10 @@ function runTests(){
 
     executeDifferentLogCalls(logger);
 
-    logger.composeSyslogMessage = function(message, severity){
+    logger.setMessageComposer(function(message, severity){
         return new Buffer('<' + (this.facility * 8 + severity) + '>' +
                 this.getDate() + ' ' + '[' + process.pid + ']:' + message);
-    };
-
+    });
     executeDifferentLogCalls(logger);
 
     setTimeout(function(){
@@ -26,25 +25,27 @@ function runTests(){
 }
 
 
+function setupServer(){
+    var dgram = require("dgram");
+
+    var server = dgram.createSocket("udp4");
+    var messages = [];
 
 
-var dgram = require("dgram");
+    server.on("message", function (msg, rinfo) {
+      console.log(msg.toString());
+      messages.push(msg.toString());
+    });
 
-var server = dgram.createSocket("udp4");
-var messages = [];
+    server.on("listening", function () {
+      var address = server.address();
+      console.log("server listening " +
+          address.address + ":" + address.port);
+      runTests();
+    });
 
+    server.bind(5514);
+}
 
-server.on("message", function (msg, rinfo) {
-  console.log(msg.toString());
-  messages.push(msg.toString());
-});
-
-server.on("listening", function () {
-  var address = server.address();
-  console.log("server listening " +
-      address.address + ":" + address.port);
-  runTests();
-});
-
-server.bind(5514);
+setupServer();
 
