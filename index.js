@@ -6,45 +6,15 @@ var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
 var SingletonInstance = null;
 
-function leadZero(n) {
-    if (n < 10) {
-        return '0' + n;
-    } else {
-        return n;
-    }
-}
-
-/**
- * Get current date in syslog format. Thanks https://github.com/kordless/lodge
- * @returns {String}
- */
-function getDate() {
-    var dt = new Date();
-    var hours = leadZero(dt.getHours());
-    var minutes = leadZero(dt.getMinutes());
-    var seconds = leadZero(dt.getSeconds());
-    var month = dt.getMonth();
-    var day = dt.getDate();
-    if(day < 10){
-      day = ' ' + day;
-    }
-    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
-            'Sep', 'Oct', 'Nov', 'Dec' ];
-    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
-}
 
 var Transport = {
     UDP: function(message, severity) {
         var client = dgram.createSocket('udp4');
         var self = this;
-
-        message = new Buffer('<' + (this.facility * 8 + severity) + '>' +
-            getDate() + ' ' + this.hostname + ' ' + 
-            this.tag + '[' + process.pid + ']:' + message);
-
-        client.send(message,
+        var syslogMessage = this.composeSyslogMessage(message, severity);
+        client.send(syslogMessage,
                     0,
-                    message.length,
+                    syslogMessage.length,
                     this.port,
                     this.address,
                     function(err, bytes) {
@@ -73,13 +43,10 @@ var Transport = {
 
         return function(message, severity) {
             var client = dgram.createSocket('unix_dgram') ;
-            message = new Buffer('<' + (this.facility * 8 + severity) + '>' +
-                getDate() + ' ' + this.hostname + ' ' + 
-                this.tag + '[' + process.pid + ']:' + message);
-
-            client.send(message,
+            var syslogMessage = this.composeSyslogMessage(message, severity);
+            client.send(syslogMessage,
                         0,
-                        message.length,
+                        syslogMessage.length,
                         logTarget,
                         this._logError
             );
@@ -302,6 +269,16 @@ SysLogger.prototype.debug = function() {
     this._send(format.apply(this, arguments), Severity.debug);
 };
 
+
+/**
+ * Compose syslog message
+ */
+SysLogger.prototype.composeSyslogMessage = function(message, severity) {
+    return new Buffer('<' + (this.facility * 8 + severity) + '>' +
+            this.getDate() + ' ' + this.hostname + ' ' + 
+            this.tag + '[' + process.pid + ']:' + message);
+}
+
 /**
  * Log object with `util.inspect` with notice severity
  */
@@ -332,5 +309,32 @@ SysLogger.prototype.assert = function(expression) {
         this._send(format.apply(this, arr), Severity.err);
     }
 };
+
+/**
+ * Get current date in syslog format. Thanks https://github.com/kordless/lodge
+ * @returns {String}
+ */
+SysLogger.prototype.getDate = function() {
+    var dt = new Date();
+    var hours = this.leadZero(dt.getHours());
+    var minutes = this.leadZero(dt.getMinutes());
+    var seconds = this.leadZero(dt.getSeconds());
+    var month = dt.getMonth();
+    var day = dt.getDate();
+    if(day < 10){
+      day = ' ' + day;
+    }
+    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+            'Sep', 'Oct', 'Nov', 'Dec' ];
+    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
+}
+
+SysLogger.prototype.leadZero = function(n) {
+    if (n < 10) {
+        return '0' + n;
+    } else {
+        return n;
+    }
+}
 
 module.exports = SysLogger;
