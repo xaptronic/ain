@@ -35,7 +35,7 @@ var Transport = {
 
             case 'Linux':
                 logTarget = '/dev/log' ;
-                break ;           
+                break ;
             default:
                 logTarget = false ;
                 break ;
@@ -183,7 +183,7 @@ SysLogger.prototype.set = function(config) {
     } else {
         this.setTransport(config.transport) ;
     }
-    
+
     return this;
 };
 
@@ -201,7 +201,7 @@ SysLogger.prototype.setTag = function(tag) {
 };
 SysLogger.prototype.setFacility = function(facility) {
     this.facility = facility || Facility.user;
-    if (typeof this.facility == 'string'){ 
+    if (typeof this.facility == 'string'){
         this.facility = Facility[this.facility];
     }
     return this;
@@ -285,7 +285,7 @@ SysLogger.prototype.debug = function() {
  */
 SysLogger.prototype.composeSyslogMessage = function(message, severity) {
     return new Buffer('<' + (this.facility * 8 + severity) + '>' +
-            this.getDate() + ' ' + this.hostname + ' ' + 
+            this.getDate() + ' ' + this.hostname + ' ' +
             this.tag + '[' + process.pid + ']:' + message);
 }
 
