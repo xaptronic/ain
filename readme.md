@@ -87,7 +87,7 @@ The `set` function takes one argument, a configuration object which can contain 
  * facility - defaults to user
  * hostname - defaults to require('os').hostname()
  * port - defaults to 514
- * transport - defaults to 'UDP', can also be 'file'
+ * transport - defaults to 'UDP'
  * messageComposer - a custom function to compose syslog messages
 
 All of these are optional. If you provide a `hostname` transport is automatically set to UDP

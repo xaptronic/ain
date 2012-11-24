@@ -6,6 +6,25 @@ var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
 var SingletonInstance = null;
 
+
+var Transport = {
+    UDP: function(message, severity) {
+        var client = dgram.createSocket('udp4');
+        var self = this;
+        var syslogMessage = this.composerFunction(message, severity);
+        client.send(syslogMessage,
+                    0,
+                    syslogMessage.length,
+                    this.port,
+                    this.address,
+                    function(err, bytes) {
+                      self._logError(err, bytes);
+                      client.close();
+                    }
+        );
+    }
+};
+
 var Facility = {
     kern:   0,
     user:   1,
@@ -36,62 +55,6 @@ var Severity = {
     info:   6,
     debug:  7
 };
-
-
-var Transport = {
-    UDP: function(message, severity) {
-        var client = dgram.createSocket('udp4');
-        var self = this;
-        var syslogMessage = this.composerFunction(message, severity);
-        client.send(syslogMessage,
-                    0,
-                    syslogMessage.length,
-                    this.port,
-                    this.address,
-                    function(err, bytes) {
-                      self._logError(err, bytes);
-                      client.close();
-                    }
-        );
-    },
-
-    file: (function() {
-        var logTarget ;
-
-        switch(require('os').type()) {
-            case 'Darwin': 
-            case 'FreeBSD':
-                logTarget = '/var/run/syslog' ;
-                break ;
-
-            case 'Linux':
-                logTarget = '/dev/log' ;
-                break ;
-            default:
-                logTarget = false ;
-                break ;
-        }
-
-        return function(message, severity) {
-            if (false === logTarget) {
-                throw new Error('Unknown OS Type: ' + require('os').type()) ;
-            }
-
-            var client = dgram.createSocket('unix_dgram') ;
-            var syslogMessage = this.composerFunction(message, severity);
-            client.send(syslogMessage,
-                        0,
-                        syslogMessage.length,
-                        logTarget,
-                        this._logError
-            );
-            client.close() ;
-
-        };
-    })()
-};
-
-
 
 // Format RegExp
 var formatRegExp = /%[sdj]/g;
