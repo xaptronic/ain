@@ -6,6 +6,37 @@ var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
 var SingletonInstance = null;
 
+var Facility = {
+    kern:   0,
+    user:   1,
+    mail:   2,
+    daemon: 3,
+    auth:   4,
+    syslog: 5,
+    lpr:    6,
+    news:   7,
+    uucp:   8,
+    local0: 16,
+    local1: 17,
+    local2: 18,
+    local3: 19,
+    local4: 20,
+    local5: 21,
+    local6: 22,
+    local7: 23
+};
+
+var Severity = {
+    emerg:  0,
+    alert:  1,
+    crit:   2,
+    err:    3,
+    warn:   4,
+    notice: 5,
+    info:   6,
+    debug:  7
+};
+
 
 var Transport = {
     UDP: function(message, severity) {
@@ -60,36 +91,7 @@ var Transport = {
     })()
 };
 
-var Facility = {
-    kern:   0,
-    user:   1,
-    mail:   2,
-    daemon: 3,
-    auth:   4,
-    syslog: 5,
-    lpr:    6,
-    news:   7,
-    uucp:   8,
-    local0: 16,
-    local1: 17,
-    local2: 18,
-    local3: 19,
-    local4: 20,
-    local5: 21,
-    local6: 22,
-    local7: 23
-};
 
-var Severity = {
-    emerg:  0,
-    alert:  1,
-    crit:   2,
-    err:    3,
-    warn:   4,
-    notice: 5,
-    info:   6,
-    debug:  7
-};
 
 // Format RegExp
 var formatRegExp = /%[sdj]/g;
