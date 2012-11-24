@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.1.1
+
+Bugfix release
+
+* The logging to file function crashed on unsupported systems due to
+  immediate execution
+
+
+
 ## v1.1.0
 
 * Custom message composer
