@@ -18,10 +18,10 @@ var Transport = {
                     this.port,
                     this.address,
                     function(err, bytes) {
-                      self._logError(err, bytes);
-                      client.close();
+                        self._logError(err, bytes);
+                        client.close();
                     }
-        );
+                   );
     }
 };
 
@@ -65,37 +65,37 @@ var formatRegExp = /%[sdj]/g;
  * @returns
  */
 function format(f) {
-  var   util = require('util'),
-        i    = 0;
+    var   util = require('util'),
+    i    = 0;
 
-  if (typeof f !== 'string') {
-    var objects = [];
-    for (i = 0; i < arguments.length; i++) {
-      objects.push(util.inspect(arguments[i]));
+    if (typeof f !== 'string') {
+        var objects = [];
+        for (i = 0; i < arguments.length; i++) {
+            objects.push(util.inspect(arguments[i]));
+        }
+        return objects.join(' ');
     }
-    return objects.join(' ');
-  }
 
 
-  i = 1;
-  var args = arguments;
-  var str = String(f).replace(formatRegExp, function(x) {
-    switch (x) {
-      case '%s': return String(args[i++]);
-      case '%d': return Number(args[i++]);
-      case '%j': return JSON.stringify(args[i++]);
-      default:
-        return x;
+    i = 1;
+    var args = arguments;
+    var str = String(f).replace(formatRegExp, function(x) {
+        switch (x) {
+            case '%s': return String(args[i++]);
+            case '%d': return Number(args[i++]);
+            case '%j': return JSON.stringify(args[i++]);
+            default:
+                return x;
+        }
+    });
+    for (var len = args.length, x = args[i]; i < len; x = args[++i]) {
+        if (x === null || typeof x !== 'object') {
+            str += ' ' + x;
+        } else {
+            str += ' ' + util.inspect(x);
+        }
     }
-  });
-  for (var len = args.length, x = args[i]; i < len; x = args[++i]) {
-    if (x === null || typeof x !== 'object') {
-      str += ' ' + x;
-    } else {
-      str += ' ' + util.inspect(x);
-    }
-  }
-  return str;
+    return str;
 }
 
 /**
@@ -106,18 +106,18 @@ function format(f) {
 function SysLogger(config) {
     this._times = {};
     this._logError = function(err, other) {
-      if(err){
-        nodeConsole.error('Cannot log message via %s:%d', this.hostname, this.port);
-      }
+        if(err){
+            nodeConsole.error('Cannot log message via %s:%d', this.hostname, this.port);
+        }
     }.bind(this);
     this.set(config);
     return this;
 }
 
 /**
-* Get singleton instance of SysLogger.
-* @returns {SysLogger}
-*/
+ * Get singleton instance of SysLogger.
+ * @returns {SysLogger}
+ */
 SysLogger.getInstance = function() {
     if(!SingletonInstance){
         SingletonInstance = new SysLogger();
@@ -173,10 +173,10 @@ SysLogger.prototype.setFacility = function(facility) {
 };
 SysLogger.prototype.setHostname = function(hostname) {
     if (hostname) {
-      this.hostname = this.address = hostname;
+        this.hostname = this.address = hostname;
     } else {
-      this.hostname = DefaultHostname;
-      this.address = DefaultAddress;
+        this.hostname = DefaultHostname;
+        this.address = DefaultAddress;
     }
     return this;
 };
@@ -208,7 +208,7 @@ SysLogger.prototype._send = function(message, severity) {
 SysLogger.prototype.send = function(message, severity) {
     severity = severity || Severity.notice;
     if (typeof severity == 'string'){
-      severity = Severity[severity];
+        severity = Severity[severity];
     }
     this._send(message, severity);
 };
@@ -250,8 +250,8 @@ SysLogger.prototype.debug = function() {
  */
 SysLogger.prototype.composeSyslogMessage = function(message, severity) {
     return new Buffer('<' + (this.facility * 8 + severity) + '>' +
-            this.getDate() + ' ' + this.hostname + ' ' +
-            this.tag + '[' + process.pid + ']:' + message);
+                      this.getDate() + ' ' + this.hostname + ' ' +
+                      this.tag + '[' + process.pid + ']:' + message);
 }
 
 /**
