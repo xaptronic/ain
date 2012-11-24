@@ -291,17 +291,13 @@ SysLogger.prototype.assert = function(expression) {
  */
 SysLogger.prototype.getDate = function() {
     var dt = new Date();
-    var hours = this.leadZero(dt.getHours());
-    var minutes = this.leadZero(dt.getMinutes());
-    var seconds = this.leadZero(dt.getSeconds());
-    var month = dt.getMonth();
-    var day = dt.getDate();
-    if(day < 10){
-      day = ' ' + day;
-    }
-    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
-            'Sep', 'Oct', 'Nov', 'Dec' ];
-    return months[month] + " " + day + " " + hours + ":" + minutes + ":" + seconds;
+    var hours = leadZero(dt.getUTCHours());
+    var minutes = leadZero(dt.getUTCMinutes());
+    var seconds = leadZero(dt.getUTCSeconds());
+    var month = leadZero((dt.getUTCMonth() + 1));
+    var day = leadZero(dt.getUTCDate());
+    var year = dt.getUTCFullYear();
+    return year+'-'+month+'-'+day+' '+hours+':'+minutes+':'+seconds;
 }
 
 SysLogger.prototype.leadZero = function(n) {
