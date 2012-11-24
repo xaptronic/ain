@@ -143,11 +143,7 @@ SysLogger.prototype.set = function(config) {
     this.setHostname(config.hostname);
     this.setPort(config.port);
     this.setMessageComposer(config.messageComposer);
-    if (config.hostname) {
-        this.setTransport(Transport.UDP) ;
-    } else {
-        this.setTransport(config.transport) ;
-    }
+    this.setTransport(Transport.UDP);
 
     return this;
 };
