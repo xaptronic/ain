@@ -291,11 +291,11 @@ SysLogger.prototype.assert = function(expression) {
  */
 SysLogger.prototype.getDate = function() {
     var dt = new Date();
-    var hours = leadZero(dt.getUTCHours());
-    var minutes = leadZero(dt.getUTCMinutes());
-    var seconds = leadZero(dt.getUTCSeconds());
-    var month = leadZero((dt.getUTCMonth() + 1));
-    var day = leadZero(dt.getUTCDate());
+    var hours = this.leadZero(dt.getUTCHours());
+    var minutes = this.leadZero(dt.getUTCMinutes());
+    var seconds = this.leadZero(dt.getUTCSeconds());
+    var month = this.leadZero((dt.getUTCMonth() + 1));
+    var day = this.leadZero(dt.getUTCDate());
     var year = dt.getUTCFullYear();
     return year+'-'+month+'-'+day+' '+hours+':'+minutes+':'+seconds;
 }
