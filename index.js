@@ -6,22 +6,88 @@ var DefaultHostname = require("os").hostname();
 var DefaultAddress = "127.0.0.1";
 var SingletonInstance = null;
 
+var socket
+var socketUsers = 0
+var releaseTimeout
+var socketErrorHandler = function (err) {
+
+    if (err) {
+
+        nodeConsole.error('socket error: ' + err)
+
+    } else {
+
+        nodeConsole.error('unknown socket error!')
+
+    }
+
+
+
+    if (socket !== undefined) {
+
+        socket.close()
+
+        socket = undefined
+
+        socketUsers = 0
+
+    }
+
+}
+var getSocket = function () {
+
+    if (undefined === socket) {
+
+        socket = dgram.createSocket('udp4')
+
+        socket.on('error', socketErrorHandler)
+
+    }
+
+    ++socketUsers
+
+    return socket
+
+}
+var releaseSocket = function () {
+
+    --socketUsers
+
+    if (0 == socketUsers && undefined === releaseTimeout) {
+
+        releaseTimeout = setTimeout(function () {
+
+            if (0 == socketUsers && socket !== undefined) {
+
+                socket.close()
+
+                socket = undefined
+
+            }
+
+            releaseTimeout = undefined
+
+        }, 1000)
+
+    }
+
+}
+
 
 var Transport = {
     UDP: function(message, severity) {
-        var client = dgram.createSocket('udp4');
         var self = this;
         var syslogMessage = this.composerFunction(message, severity);
-        client.send(syslogMessage,
-                    0,
-                    syslogMessage.length,
-                    this.port,
-                    this.address,
-                    function(err, bytes) {
-                        self._logError(err, bytes);
-                        client.close();
-                    }
-                   );
+        getSocket().send(syslogMessage,
+                         0,
+                         syslogMessage.length,
+                         this.port,
+                         this.address,
+                         function(err, bytes) {
+                             self._logError(err, bytes);
+                             releaseSocket();
+                         }
+                        );
     }
 };
 
