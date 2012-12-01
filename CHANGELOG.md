@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.1
+
+* Reusing socket to send messages over UDP (Carlos Brito Lage/cblage)
+
 ## v1.1.1
 
 Bugfix release
