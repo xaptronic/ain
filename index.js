@@ -414,3 +414,4 @@ SysLogger.prototype.leadZero = function(n) {
 }
 
 module.exports = SysLogger;
+
