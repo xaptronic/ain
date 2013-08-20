@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.1
+
+* Reusing socket to send messages over UDP (Carlos Brito Lage/cblage)
+
 ## v1.1.1
 
 Bugfix release
@@ -22,8 +26,8 @@ WARNING: This upgrade is not API compatible to previous version.
 		var SysLogger = require('ain2');
 		var logger = new SysLogger({ port : 514, tag : 'myTag' });
 
-* If you want to have singleton logger, use 
-    
+* If you want to have singleton logger, use
+
 		var logger = require('ain2').getInstance();
 
 ## v0.2.1
