@@ -1,16 +1,18 @@
-function executeDifferentLogCalls(logger){
-    logger.log('log');
-    logger.info('info');
-    logger.warn('warn');
-    logger.error('error');
-    logger.debug('debug');
+function executeDifferentLogCalls(logger, limit){
+    for(var i = 0; i < limit; i++){
+        logger.log('log');
+        logger.info('info');
+        logger.warn('warn');
+        logger.error('error');
+        logger.debug('debug');
+    };
 }
 
 function runTests(){
     var Syslog = require('../index.js');
     var logger = new Syslog({port : 5514});
 
-    executeDifferentLogCalls(logger);
+    executeDifferentLogCalls(logger, 500);
 
     logger.setMessageComposer(function(message, severity){
         return new Buffer('<' + (this.facility * 8 + severity) + '>' +
@@ -20,7 +22,7 @@ function runTests(){
 
     setTimeout(function(){
         process.exit();
-    }, 500);
+    }, 1000);
 
 }
 
@@ -29,12 +31,9 @@ function setupServer(){
     var dgram = require("dgram");
 
     var server = dgram.createSocket("udp4");
-    var messages = [];
-
 
     server.on("message", function (msg, rinfo) {
       console.log(msg.toString());
-      messages.push(msg.toString());
     });
 
     server.on("listening", function () {
