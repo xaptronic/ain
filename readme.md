@@ -187,3 +187,8 @@ To log a message with the desired severity level you can use the `send` function
     
 The `send` function takes two arguments: message and optional severity level. By 
 default, the severity level is *notice*.
+
+# Development
+
+    npm install
+    npm test
