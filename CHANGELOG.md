@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.3.0
+
+* Added support for unix-dgram for node versions > 0.5
+* Added travis build file to drive tests
+
 ## v1.2.1
 
 * Reusing socket to send messages over UDP (Carlos Brito Lage/cblage)
