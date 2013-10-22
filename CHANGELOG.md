@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v1.3.0
+## v1.3.1
 
 * Added support for unix-dgram for node versions > 0.5
 * Added travis build file to drive tests
