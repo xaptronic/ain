@@ -34,11 +34,11 @@ var socketErrorHandler = function (err) {
     }
 
 }
-var getSocket = function () {
+var getSocket = function (type) {
 
     if (undefined === socket) {
 
-        socket = dgram.createSocket('udp4')
+        socket = dgram.createSocket(type);
 
         socket.on('error', socketErrorHandler)
 
@@ -78,7 +78,7 @@ var Transport = {
     UDP: function(message, severity) {
         var self = this;
         var syslogMessage = this.composerFunction(message, severity);
-        getSocket().send(syslogMessage,
+        getSocket('udp4').send(syslogMessage,
                          0,
                          syslogMessage.length,
                          this.port,
@@ -88,6 +88,35 @@ var Transport = {
                              releaseSocket();
                          }
                         );
+    },
+    unix_dgram: function(message, severity){
+        var self = this;
+        var preambleBuffer = self.composerFunction('', severity);
+        var formattedMessageBuffer = Buffer.isBuffer(message) ? message : new Buffer(message);
+        var chunkSize = 2000 - preambleBuffer.length - 200;
+        var numChunks = Math.ceil(formattedMessageBuffer.length / chunkSize);
+
+        var fragments = [preambleBuffer];
+        if (numChunks > 1){
+            for (var i = 0; i < numChunks; i++){
+                fragments.push(formattedMessageBuffer.slice(i * chunkSize, Math.min(formattedMessageBuffer.length, (i + 1) * chunkSize)),
+                              new Buffer(' [' + (i + 1) + '/' + numChunks + ']', 'ascii')); 
+            }
+        } else{
+            fragments.push(formattedMessageBuffer);
+        }
+
+        var chunk = Buffer.concat(fragments); 
+        var socket = getSocket('unix_dgram');
+        socket.send(chunk,
+                    0,
+                    chunk.length,
+                    this.path,
+                    function(err, bytes){
+                        self._logError(err, bytes);
+                        releaseSocket();
+                    }
+        );
     }
 };
 
@@ -210,6 +239,7 @@ SysLogger.prototype.set = function(config) {
     this.setHostname(config.hostname);
     this.setAddress(config.address);
     this.setPort(config.port);
+    this.setPath(config.path);
     this.setMessageComposer(config.messageComposer);
     this.setTransport(Transport.UDP);
 
@@ -218,8 +248,11 @@ SysLogger.prototype.set = function(config) {
 
 SysLogger.prototype.setTransport = function(transport) {
     this.transport = transport || Transport.UDP;
-    if (typeof this.transport == 'string') {
+    if (typeof this.transport === 'string') {
         this.transport = Transport[this.transport] ;
+    }
+    if (typeof this.path === 'string' && this.path.length > 0){ 
+        this.transport = Transport.unix_dgram
     }
     return this;
 };
@@ -249,6 +282,20 @@ SysLogger.prototype.setHostname = function(hostname) {
 
 SysLogger.prototype.setPort = function(port) {
     this.port = port || 514;
+    return this;
+};
+
+SysLogger.prototype.setPath = function(path) {
+    this.path = path || '';
+
+    if (typeof this.path === 'string' && this.path.length > 0){
+        try {
+            dgram = require('unix-dgram');
+        } catch(err){
+            throw new Error('unix-dgram module not installed, cannot specify a unix socket path');
+        }
+    }
+
     return this;
 };
 
