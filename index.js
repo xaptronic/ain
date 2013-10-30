@@ -362,6 +362,7 @@ SysLogger.prototype.debug = function() {
  * Compose syslog message
  */
 SysLogger.prototype.composeSyslogMessage = function(message, severity, tag) {
+    return new Buffer('<' + (this.facility * 8 + severity) + '>' + this.hostname + '.' + process.pid + ' ' + tag + ' ' + message);
     return new Buffer('<' + (this.facility * 8 + severity) + '>' +
                       this.getDate() + ' ' + this.hostname + ' ' +
                       (tag || this.tag) + '[' + process.pid + ']:' + message);
