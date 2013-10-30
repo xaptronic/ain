@@ -330,31 +330,31 @@ SysLogger.prototype.send = function(message, severity, tag) {
  * Send log message with notice severity.
  */
 SysLogger.prototype.log = function() {
-    this._send(format.apply(this, arguments), Severity.notice, arguments.callee.name);
+    this._send(format.apply(this, arguments), Severity.notice, 'log');
 };
 /**
  * Send log message with info severity.
  */
 SysLogger.prototype.info = function() {
-    this._send(format.apply(this, arguments), Severity.info, arguments.callee.name);
+    this._send(format.apply(this, arguments), Severity.info, 'info');
 };
 /**
  * Send log message with warn severity.
  */
 SysLogger.prototype.warn = function() {
-    this._send(format.apply(this, arguments), Severity.warn, arguments.callee.name);
+    this._send(format.apply(this, arguments), Severity.warn, 'warn');
 };
 /**
  * Send log message with err severity.
  */
 SysLogger.prototype.error = function() {
-    this._send(format.apply(this, arguments), Severity.err, arguments.callee.name);
+    this._send(format.apply(this, arguments), Severity.err, 'error');
 };
 /**
  * Send log message with debug severity.
  */
 SysLogger.prototype.debug = function() {
-    this._send(format.apply(this, arguments), Severity.debug, arguments.callee.name);
+    this._send(format.apply(this, arguments), Severity.debug, 'debug');
 };
 
 
