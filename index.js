@@ -356,6 +356,13 @@ SysLogger.prototype.error = function() {
 SysLogger.prototype.debug = function() {
     this._send(format.apply(this, arguments), Severity.debug, 'debug');
 };
+/**
+ * Send log message with stats tag
+ */
+SysLogger.prototype.stats = function () {
+    var util = require('util');
+    this._send(format.apply(this, arguments), Severity.notice, 'stats');
+}
 
 
 /**
@@ -373,7 +380,7 @@ SysLogger.prototype.composeSyslogMessage = function(message, severity, tag) {
  */
 SysLogger.prototype.dir = function(object) {
     var util = require('util');
-    this._send(util.inspect(object) + '\n', Severity.notice);
+    this._send(util.inspect(object) + '\n', Severity.notice, 'dir');
 };
 
 SysLogger.prototype.time = function(label) {
