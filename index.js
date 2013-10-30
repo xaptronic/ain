@@ -75,7 +75,7 @@ var releaseSocket = function () {
 
 
 var Transport = {
-    UDP: function(message, severity) {
+    UDP: function(message, severity, tag) {
         var self = this;
         var syslogMessage = this.composerFunction(message, severity);
         getSocket('udp4').send(syslogMessage,
@@ -89,7 +89,7 @@ var Transport = {
                          }
                         );
     },
-    unix_dgram: function(message, severity){
+    unix_dgram: function(message, severity, tag){
         var self = this;
         var preambleBuffer = self.composerFunction('', severity);
         var formattedMessageBuffer = Buffer.isBuffer(message) ? message : new Buffer(message);
@@ -309,8 +309,8 @@ SysLogger.prototype.setMessageComposer = function(composerFunction){
  * @param {String} message
  * @param {Severity} severity
  */
-SysLogger.prototype._send = function(message, severity) {
-    this.transport(message, severity) ;
+SysLogger.prototype._send = function(message, severity, tag) {
+    this.transport(message, severity, tag) ;
 };
 
 /**
@@ -318,53 +318,53 @@ SysLogger.prototype._send = function(message, severity) {
  * @param {String} message
  * @param {Number|String} severity
  */
-SysLogger.prototype.send = function(message, severity) {
+SysLogger.prototype.send = function(message, severity, tag) {
     severity = severity || Severity.notice;
     if (typeof severity == 'string'){
         severity = Severity[severity];
     }
-    this._send(message, severity);
+    this._send(message, severity, tag);
 };
 
 /**
  * Send log message with notice severity.
  */
 SysLogger.prototype.log = function() {
-    this._send(format.apply(this, arguments), Severity.notice);
+    this._send(format.apply(this, arguments), Severity.notice, arguments.callee.name);
 };
 /**
  * Send log message with info severity.
  */
 SysLogger.prototype.info = function() {
-    this._send(format.apply(this, arguments), Severity.info);
+    this._send(format.apply(this, arguments), Severity.info, arguments.callee.name);
 };
 /**
  * Send log message with warn severity.
  */
 SysLogger.prototype.warn = function() {
-    this._send(format.apply(this, arguments), Severity.warn);
+    this._send(format.apply(this, arguments), Severity.warn, arguments.callee.name);
 };
 /**
  * Send log message with err severity.
  */
 SysLogger.prototype.error = function() {
-    this._send(format.apply(this, arguments), Severity.err);
+    this._send(format.apply(this, arguments), Severity.err, arguments.callee.name);
 };
 /**
  * Send log message with debug severity.
  */
 SysLogger.prototype.debug = function() {
-    this._send(format.apply(this, arguments), Severity.debug);
+    this._send(format.apply(this, arguments), Severity.debug, arguments.callee.name);
 };
 
 
 /**
  * Compose syslog message
  */
-SysLogger.prototype.composeSyslogMessage = function(message, severity) {
+SysLogger.prototype.composeSyslogMessage = function(message, severity, tag) {
     return new Buffer('<' + (this.facility * 8 + severity) + '>' +
                       this.getDate() + ' ' + this.hostname + ' ' +
-                      this.tag + '[' + process.pid + ']:' + message);
+                      (tag || this.tag) + '[' + process.pid + ']:' + message);
 }
 
 /**
