@@ -77,7 +77,7 @@ var releaseSocket = function () {
 var Transport = {
     UDP: function(message, severity, tag) {
         var self = this;
-        var syslogMessage = this.composerFunction(message, severity);
+        var syslogMessage = this.composerFunction(message, severity, tag);
         getSocket('udp4').send(syslogMessage,
                          0,
                          syslogMessage.length,
